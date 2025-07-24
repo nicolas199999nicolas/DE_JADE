@@ -14,7 +14,6 @@ vector<double> differential_evolution(
     mt19937 gen(static_cast<unsigned int>(time(nullptr)));
     uniform_real_distribution<> rand01(0.0, 1.0);
     uniform_int_distribution<> randint1D(1, D);
-
     // 行 03: 創建隨機初始種群
     vector<vector<double>> population;
     for (int i = 0; i < NP; ++i)
@@ -51,14 +50,14 @@ vector<double> differential_evolution(
                 fitness.emplace_back(f(population[idx]), idx);
             // 按照適應度排序
             sort(fitness.begin(), fitness.end());
-            int top = max(1, static_cast<int>(p * NP));
-            uniform_int_distribution<> randTop(0, top - 1);
-            int pbestIdx = fitness[randTop(gen)].second;
-            const auto& xpbest = population[pbestIdx];
-
+            int top = max(1, static_cast<int>(p * NP));//取top為前p%的個體
+            uniform_int_distribution<> randTop(0, top - 1);//在top當中隨機選擇
+            int pbestIdx = fitness[randTop(gen)].second;//pbestIdx為前p%的個體索引
+            const auto& xpbest = population[pbestIdx];//xpbest為前p%的個體
             // 行 09: 選擇 xr1,g != xi,g
             int r1;
-            do { r1 = uniform_int_distribution<>(0, NP - 1)(gen); } while (r1 == i);
+            do { r1 = uniform_int_distribution<>(0, NP - 1)(gen); 
+            } while (r1 == i);
             const auto& xr1 = population[r1];
 
             // 行 10: 從 P ∪ A 選擇 xr2,g
